@@ -86,6 +86,7 @@ function applyModalViewportInsets(webApp: TelegramWebApp): void {
   const { top, bottom } = getModalInsetsFromWebApp(webApp)
   document.documentElement.style.setProperty('--modal-gap-top', `${top}px`)
   document.documentElement.style.setProperty('--modal-gap-bottom', `${bottom}px`)
+  window.dispatchEvent(new Event('modalInsetsChanged'))
 }
 
 export function getModalInsets() {
