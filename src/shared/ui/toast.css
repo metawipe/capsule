@@ -1,6 +1,6 @@
 .toast {
   position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 100px);
+  top: calc(var(--app-safe-area-top) + 100px);
   left: 50%;
   z-index: 10001;
   min-width: 280px;

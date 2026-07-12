@@ -14,8 +14,10 @@
   -moz-osx-font-smoothing: grayscale;
   
   --telegram-header-height: 0px;
+  --app-safe-area-top: env(safe-area-inset-top, 0px);
+  --app-safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --app-topbar-height: 40px;
-  --app-topbar-offset: calc(env(safe-area-inset-top, 0px) + 30px + var(--app-topbar-height) + 12px);
+  --app-topbar-offset: calc(var(--app-safe-area-top) + 30px + var(--app-topbar-height) + 12px);
   --market-toolbar-height: 118px;
   --my-gifts-toolbar-height: 170px;
   --header-height: var(--app-topbar-offset);
@@ -58,7 +60,8 @@
 }
 
 html.android-mini-app {
-  --modal-gap-top: 64px;
+  --app-safe-area-top: 48px;
+  --modal-gap-top: 12px;
   --modal-gap-bottom: 12px;
 }
 

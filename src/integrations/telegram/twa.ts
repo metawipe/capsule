@@ -82,6 +82,40 @@ function isDesktopTelegramClient(webApp: TelegramWebApp): boolean {
     && !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
+function isAndroidDevice(webApp?: TelegramWebApp | null) {
+  return webApp?.platform?.toLowerCase() === 'android'
+    || document.documentElement.classList.contains('android-mini-app')
+    || /Android/i.test(navigator.userAgent)
+}
+
+const ANDROID_APP_TOP_GAP = 48
+
+function getAppSafeAreaTop(webApp?: TelegramWebApp | null) {
+  const isAndroid = isAndroidDevice(webApp)
+  const contentInset = webApp?.contentSafeAreaInset
+  const safeInset = webApp?.safeAreaInset
+  const topInset = Math.max(contentInset?.top ?? 0, safeInset?.top ?? 0)
+
+  if (topInset > 0) return topInset
+  return isAndroid ? ANDROID_APP_TOP_GAP : 0
+}
+
+function applyAppViewportInsets(webApp?: TelegramWebApp | null) {
+  const top = getAppSafeAreaTop(webApp)
+  document.documentElement.style.setProperty('--app-safe-area-top', `${top}px`)
+
+  const bottomInset = Math.max(
+    webApp?.contentSafeAreaInset?.bottom ?? 0,
+    webApp?.safeAreaInset?.bottom ?? 0,
+  )
+  if (bottomInset > 0) {
+    document.documentElement.style.setProperty('--app-safe-area-bottom', `${bottomInset}px`)
+  }
+
+  if (webApp) applyModalViewportInsets(webApp)
+  window.dispatchEvent(new Event('appInsetsChanged'))
+}
+
 function applyModalViewportInsets(webApp: TelegramWebApp): void {
   const { top, bottom } = getModalInsetsFromWebApp(webApp)
   document.documentElement.style.setProperty('--modal-gap-top', `${top}px`)
@@ -93,51 +127,61 @@ export function getModalInsets() {
   const webApp = getTelegramWebApp()
   if (webApp) return getModalInsetsFromWebApp(webApp)
 
-  const isAndroid = document.documentElement.classList.contains('android-mini-app')
-    || /Android/i.test(navigator.userAgent)
+  const isAndroid = isAndroidDevice()
 
   return {
-    top: isAndroid ? 64 : 12,
+    top: isAndroid ? 12 : 12,
     bottom: 8,
     side: 8,
   }
 }
 
 function getModalInsetsFromWebApp(webApp: TelegramWebApp) {
-  const isAndroid = webApp.platform === 'android' || /Android/i.test(navigator.userAgent)
+  const isAndroid = isAndroidDevice(webApp)
   const contentInset = webApp.contentSafeAreaInset
   const safeInset = webApp.safeAreaInset
   const topInset = Math.max(contentInset?.top ?? 0, safeInset?.top ?? 0)
   const bottomInset = Math.max(contentInset?.bottom ?? 0, safeInset?.bottom ?? 0)
-  const extraTop = isAndroid ? 20 : 12
-  const extraBottom = 8
 
   return {
-    top: topInset > 0 ? topInset + extraTop : (isAndroid ? 64 : 12),
-    bottom: bottomInset > 0 ? bottomInset + extraBottom : 8,
+    top: topInset > 0 ? topInset + 12 : (isAndroid ? 12 : 12),
+    bottom: bottomInset > 0 ? bottomInset + 8 : 8,
     side: 8,
   }
 }
 
 export function initTelegramMiniApp(): void {
   if (!isTelegramWebApp()) {
+    if (isAndroidDevice()) {
+      document.documentElement.classList.add('android-mini-app');
+      applyAppViewportInsets();
+    }
     return;
   }
 
   const webApp = getTelegramWebApp();
   if (!webApp) return;
 
-  const isAndroid = webApp.platform === 'android' || /Android/i.test(navigator.userAgent);
+  const isAndroid = isAndroidDevice(webApp);
   document.documentElement.classList.toggle('android-mini-app', isAndroid);
-  applyModalViewportInsets(webApp);
+  applyAppViewportInsets(webApp);
 
   try {
     webApp.ready();
   } catch (error) {}
 
-  const onViewportChange = () => applyModalViewportInsets(webApp);
-  window.addEventListener('viewportChanged', onViewportChange);
-  window.addEventListener('safeAreaChanged', onViewportChange);
+  const onViewportChange = () => applyAppViewportInsets(webApp);
+  const tg = webApp as TelegramWebApp & {
+    onEvent?: (eventType: string, callback: () => void) => void
+  }
+  if (typeof tg.onEvent === 'function') {
+    tg.onEvent('viewportChanged', onViewportChange)
+    tg.onEvent('safeAreaChanged', onViewportChange)
+    tg.onEvent('contentSafeAreaChanged', onViewportChange)
+  } else {
+    window.addEventListener('viewportChanged', onViewportChange);
+    window.addEventListener('safeAreaChanged', onViewportChange);
+  }
 
   // Desktop clients use the largest available Mini App window. On mobile,
   // request the native fullscreen mode when the Telegram client supports it.
@@ -163,8 +207,9 @@ export function initTelegramMiniApp(): void {
   }
 
   // Fullscreen expands after ready(); re-apply insets once layout settles.
-  window.setTimeout(() => applyModalViewportInsets(webApp), 0);
-  window.setTimeout(() => applyModalViewportInsets(webApp), 250);
+  window.setTimeout(() => applyAppViewportInsets(webApp), 0);
+  window.setTimeout(() => applyAppViewportInsets(webApp), 250);
+  window.setTimeout(() => applyAppViewportInsets(webApp), 800);
 
   try {
     document.addEventListener(
