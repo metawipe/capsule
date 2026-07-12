@@ -1,5 +1,5 @@
 .buy-gift-modal__sheet {
-  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 48px - 16px);
+  max-height: calc(100dvh - var(--modal-gap-top) - var(--modal-gap-bottom));
 }
 
 .buy-gift-modal__sheet .modal__handle-wrap {

@@ -1,3 +1,13 @@
+:root {
+  --modal-gap-side: 8px;
+  --modal-gap-top: calc(12px + env(safe-area-inset-top, 0px));
+  --modal-gap-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+}
+
+.android-mini-app {
+  --modal-gap-top: calc(28px + env(safe-area-inset-top, 0px));
+}
+
 .modal__root {
   position: absolute;
   inset: 0;
@@ -5,8 +15,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding: 8px;
-  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+  padding: var(--modal-gap-top) var(--modal-gap-side) var(--modal-gap-bottom);
   pointer-events: none;
 }
 
@@ -30,37 +39,24 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  width: calc(100% - 16px);
-  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 48px - 16px);
-  border: 0.5px solid color-mix(in srgb, var(--secondary-foreground) 14%, transparent);
+  width: 100%;
+  max-height: calc(100dvh - var(--modal-gap-top) - var(--modal-gap-bottom));
+  border: none;
   border-radius: 32px;
   overflow: hidden;
+  background: #212020;
   cursor: grab;
   touch-action: pan-y;
   -webkit-tap-highlight-color: transparent;
-  box-shadow: var(--glass-shadow);
-  isolation: isolate;
   pointer-events: auto;
-}
-
-@supports (corner-shape: squircle) {
-  .modal__content {
-    border-radius: 48px;
-    corner-shape: squircle;
-  }
+  contain: paint;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .modal__content:active {
   cursor: grabbing;
-}
-
-.modal__content-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: #212020;
-  border-radius: inherit;
-  pointer-events: none;
 }
 
 .modal__handle-wrap {

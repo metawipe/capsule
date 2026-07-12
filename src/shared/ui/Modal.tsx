@@ -215,10 +215,6 @@ export function Modal({
 
           >
 
-            <div className="modal__content-bg" aria-hidden="true" />
-
-
-
             {!hideHandle && (
 
               <div className="modal__handle-wrap">
