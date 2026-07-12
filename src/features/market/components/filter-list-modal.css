@@ -1,0 +1,323 @@
+.filter-list-modal__sheet {
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 48px - 16px);
+}
+
+.filter-list-modal__body {
+  padding: 10px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  overflow: hidden;
+  gap: 12px;
+}
+
+.filter-list-modal {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 12px;
+  color: #f5f5f7;
+  min-height: 0;
+}
+
+.filter-list-modal__sortBar {
+  display: grid;
+  grid-template-columns: 1fr minmax(72px, auto);
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0 4px;
+}
+
+.filter-list-modal__sortBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--secondary-foreground);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filter-list-modal__sortBtn--left {
+  justify-self: start;
+}
+
+.filter-list-modal__sortBtn--right {
+  justify-self: end;
+}
+
+.filter-list-modal__sortChevrons {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-list-modal__sortChevron {
+  display: block;
+  color: color-mix(in srgb, var(--secondary-foreground) 72%, transparent);
+}
+
+.filter-list-modal__sortChevron--flipped {
+  transform: rotate(180deg);
+}
+
+.filter-list-modal__sortChevron--active {
+  color: #f5f5f7;
+}
+
+.filter-list-modal__list {
+  max-height: min(52vh, 420px);
+  overflow: auto;
+  display: grid;
+  gap: 0;
+  padding: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filter-list-modal__list::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-list-modal__empty {
+  min-height: 120px;
+  display: grid;
+  place-items: center;
+  color: var(--secondary-foreground);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.filter-list-modal__item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 64px;
+  padding: 10px 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #f5f5f7;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  box-shadow: none;
+  transition: opacity 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filter-list-modal__item:active {
+  opacity: 0.82;
+}
+
+.filter-list-modal__item--selected {
+  background: transparent;
+  box-shadow: none;
+}
+
+.filter-list-modal__check {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1.5px solid #3a3a3a;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.filter-list-modal__check--selected {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+.filter-list-modal__check .material-icons-round {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  color: #fff;
+}
+
+.filter-list-modal__thumbCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.filter-list-modal__iconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #1c1c1e;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.filter-list-modal__iconWrap--placeholder {
+  background: linear-gradient(135deg, #2f2f32, #1c1c1e);
+}
+
+.filter-list-modal__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.filter-list-modal__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--secondary-foreground);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.filter-list-modal__countIcon {
+  font-size: 10px;
+}
+
+.filter-list-modal__info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.filter-list-modal__nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.filter-list-modal__label {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filter-list-modal__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #1f7a3f;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.filter-list-modal__badgeIcon {
+  font-size: 9px;
+}
+
+.filter-list-modal__stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.filter-list-modal__price {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.filter-list-modal__volume {
+  color: var(--secondary-foreground);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.filter-list-modal__item--skeleton {
+  pointer-events: none;
+  grid-template-columns: 22px 44px 1fr;
+}
+
+.filter-list-modal__skeleton-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+}
+
+.filter-list-modal__skeleton-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+.filter-list-modal__skeleton-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.filter-list-modal__skeleton-label {
+  width: min(55%, 220px);
+  height: 14px;
+}
+
+.filter-list-modal__skeleton-meta {
+  width: min(35%, 120px);
+  height: 10px;
+}
+
+.filter-list-modal__footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding-top: 2px;
+}
+
+.filter-list-modal__btn {
+  min-height: 48px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--glass-shadow-soft);
+  transition: transform 0.15s ease, background-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filter-list-modal__btn:active {
+  transform: scale(0.98);
+}
+
+.filter-list-modal__btn--secondary {
+  background: color-mix(in srgb, var(--muted) 88%, transparent);
+  color: #fafcfe;
+}
+
+.filter-list-modal__btn--primary {
+  background: var(--primary);
+  color: #fafcfe;
+}
+
+.filter-list-modal__btn--primary:active {
+  background: color-mix(in srgb, var(--primary) 82%, #000);
+}

@@ -1,0 +1,174 @@
+.app-topbar {
+  --app-topbar-glass-shadow:
+    inset 0 0 0 0.5px color-mix(in srgb, var(--c-light) 4%, transparent),
+    inset 1px 1px 0 -1px color-mix(in srgb, var(--c-light) 8%, transparent),
+    0 1px 2px 0 color-mix(in srgb, var(--c-dark) 4%, transparent);
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--app-topbar-height, 40px);
+}
+
+.app-topbar .glass-shadow {
+  box-shadow: var(--app-topbar-glass-shadow);
+}
+
+.app-topbar__left {
+  display: flex;
+  align-items: flex-start;
+  min-width: 0;
+  flex: 1;
+  height: var(--app-topbar-height, 40px);
+  position: relative;
+}
+
+.app-topbar__left-slot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  height: var(--app-topbar-height, 40px);
+  min-width: 0;
+  will-change: opacity, transform;
+}
+
+.app-topbar__menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(100, 100, 100, 0.2);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-topbar__menu-btn:active {
+  opacity: 0.85;
+}
+
+.app-topbar__profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  min-width: 0;
+  height: 36px;
+  padding: 0 12px 0 4px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(100, 100, 100, 0.2);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-topbar__profile-link:active {
+  opacity: 0.9;
+}
+
+.app-topbar__avatar-wrap {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+@supports (corner-shape: squircle) {
+  .app-topbar__avatar-wrap {
+    border-radius: 24px;
+    corner-shape: squircle;
+  }
+}
+
+.app-topbar__avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.app-topbar__username {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.app-topbar__profile-skeleton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+}
+
+.app-topbar__avatar-skeleton {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.app-topbar__name-skeleton {
+  width: 88px;
+  height: 14px;
+  border-radius: 6px;
+}
+
+.app-topbar__balance-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 8px;
+  margin-top: 0;
+  border: none;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary) 15%, transparent);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+.app-topbar__balance-btn:active {
+  opacity: 0.9;
+}
+
+.app-topbar__balance-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.app-topbar__balance-skeleton {
+  width: 64px;
+  height: 16px;
+  border-radius: 6px;
+}
+
+@media (max-width: 380px) {
+  .app-topbar__username {
+    max-width: 96px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-topbar__left-slot {
+    transition: none !important;
+    animation: none !important;
+  }
+}

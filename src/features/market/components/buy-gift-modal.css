@@ -1,0 +1,262 @@
+.buy-gift-modal__sheet {
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 48px - 16px);
+}
+
+.buy-gift-modal__sheet .modal__handle-wrap {
+  padding-bottom: 12px;
+}
+
+.buy-gift-modal__sheet .modal__header {
+  padding: 0 16px;
+  min-height: 44px;
+}
+
+.buy-gift-modal__sheet .modal__title {
+  display: none;
+}
+
+.buy-gift-modal__body {
+  padding: 0 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  overflow: hidden auto;
+  gap: 20px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.buy-gift-modal__body::-webkit-scrollbar {
+  display: none;
+}
+
+.buy-gift-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: #f5f5f7;
+}
+
+.buy-gift-modal__previewBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.buy-gift-modal__previewMedia {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  overflow: hidden;
+  border-radius: 32px;
+  background: transparent;
+  contain: paint;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.buy-gift-modal__previewMedia img,
+.buy-gift-modal__previewLottie {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.buy-gift-modal__previewLottie {
+  transform: translateZ(0);
+}
+
+.buy-gift-modal__previewLottie svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.buy-gift-modal__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  text-align: center;
+}
+
+.buy-gift-modal__titleRow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  max-width: 100%;
+}
+
+.buy-gift-modal__title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.buy-gift-modal__chevron {
+  font-size: 20px;
+  line-height: 1;
+  color: #fff;
+}
+
+.buy-gift-modal__id {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.buy-gift-modal__previewPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary-foreground);
+  font-size: 48px;
+  background: color-mix(in oklab, var(--input, var(--muted)) 40%, transparent);
+}
+
+.buy-gift-modal__traitsCard {
+  border-radius: 50px;
+  background: var(--secondary);
+  overflow: hidden;
+}
+
+@supports (corner-shape: squircle) {
+  .buy-gift-modal__traitsCard {
+    corner-shape: squircle;
+  }
+}
+
+.buy-gift-modal__traitsTable {
+  width: 100%;
+  border-collapse: collapse;
+  border: 0.5px solid var(--border, color-mix(in oklab, var(--secondary-foreground) 20%, transparent));
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+@supports (corner-shape: squircle) {
+  .buy-gift-modal__traitsTable {
+    corner-shape: squircle;
+  }
+}
+
+.buy-gift-modal__traitRow:not(:last-child) {
+  border-bottom: 0.5px solid color-mix(in oklab, var(--secondary-foreground) 18%, transparent);
+}
+
+.buy-gift-modal__traitLabel {
+  width: 30%;
+  padding: 10px;
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: capitalize;
+  vertical-align: middle;
+}
+
+.buy-gift-modal__traitValue {
+  padding: 10px;
+  vertical-align: middle;
+}
+
+.buy-gift-modal__traitContent {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.buy-gift-modal__traitName {
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.buy-gift-modal__traitRarity {
+  padding: 2px 4px;
+  border-radius: 8px;
+  background: color-mix(in oklab, var(--primary) 10%, transparent);
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.25;
+  flex-shrink: 0;
+}
+
+.buy-gift-modal__traitSpacer {
+  flex: 1;
+}
+
+.buy-gift-modal__traitFloor {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.buy-gift-modal__traitFloor svg {
+  width: 12px;
+  height: 12px;
+  color: var(--primary);
+}
+
+.buy-gift-modal__error {
+  color: var(--destructive, #ba4245);
+  font-size: 14px;
+  text-align: center;
+}
+
+.buy-gift-modal__footer {
+  display: flex;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.buy-gift-modal__buyBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--glass-shadow-soft);
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.buy-gift-modal__buyBtn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.buy-gift-modal__buyBtn:active:not(:disabled) {
+  transform: scale(0.98);
+  background: color-mix(in oklab, var(--primary) 82%, #000);
+}
+
+.buy-gift-modal__buyBtnPrice {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.7;
+  line-height: 1.2;
+}

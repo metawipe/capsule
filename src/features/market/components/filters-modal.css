@@ -1,0 +1,246 @@
+.filters-modal__sheet {
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 48px - 16px);
+}
+
+.filters-modal__body {
+  padding: 10px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  overflow: hidden;
+  gap: 12px;
+}
+
+.filters-modal {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 12px;
+  color: #f5f5f7;
+  min-height: 0;
+  height: 100%;
+}
+
+.filters-modal__list {
+  max-height: min(52vh, 420px);
+  overflow: auto;
+  display: grid;
+  gap: 0;
+  padding: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filters-modal__list::-webkit-scrollbar {
+  display: none;
+}
+
+.filters-modal__section {
+  display: grid;
+}
+
+.filters-modal__row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 64px;
+  padding: 10px 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #f5f5f7;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  box-shadow: none;
+  transition: opacity 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filters-modal__row:active:not(:disabled) {
+  opacity: 0.82;
+}
+
+.filters-modal__row--disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.filters-modal__iconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #1c1c1e;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.filters-modal__icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  color: #f5f5f7;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.filters-modal__rowInfo {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filters-modal__rowLabel {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.filters-modal__rowMeta {
+  color: var(--secondary-foreground);
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filters-modal__rowChevron {
+  display: block;
+  color: color-mix(in srgb, var(--secondary-foreground) 72%, transparent);
+  transition: transform 0.2s ease;
+}
+
+.filters-modal__rowChevron--open {
+  transform: rotate(180deg);
+  color: #f5f5f7;
+}
+
+.filters-modal__panel {
+  overflow: hidden;
+  padding: 0 0 4px 54px;
+}
+
+.filters-modal__panel--price {
+  padding-left: 0;
+}
+
+.filters-modal__option {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 8px 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #f5f5f7;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filters-modal__option:active {
+  opacity: 0.82;
+}
+
+.filters-modal__check {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1.5px solid #3a3a3a;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.filters-modal__check--selected {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+.filters-modal__check .material-icons-round {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  color: #fff;
+}
+
+.filters-modal__optionLabel {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.filters-modal__priceInputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 4px 0 8px;
+}
+
+.filters-modal__priceInput {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 0.5px solid color-mix(in srgb, var(--secondary-foreground) 28%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--muted) 36%, transparent);
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  outline: none;
+  box-shadow: var(--glass-shadow-soft);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.filters-modal__priceInput:focus {
+  border-color: var(--primary);
+}
+
+.filters-modal__footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding-top: 2px;
+}
+
+.filters-modal__btn {
+  min-height: 48px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--glass-shadow-soft);
+  transition: transform 0.15s ease, background-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filters-modal__btn:active {
+  transform: scale(0.98);
+}
+
+.filters-modal__btn--secondary {
+  background: color-mix(in srgb, var(--muted) 88%, transparent);
+  color: #fafcfe;
+}
+
+.filters-modal__btn--primary {
+  background: var(--primary);
+  color: #fafcfe;
+}
+
+.filters-modal__btn--primary:active {
+  background: color-mix(in srgb, var(--primary) 82%, #000);
+}

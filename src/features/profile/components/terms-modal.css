@@ -1,0 +1,71 @@
+.terms-modal__body {
+  gap: 16px;
+}
+
+.terms-modal__terms-content {
+  background: color-mix(in srgb, var(--muted) 72%, transparent);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: left;
+}
+
+.terms-modal__terms-list {
+  color: #ffffff;
+  margin: 0 0 20px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.terms-modal__terms-item {
+  margin-bottom: 12px;
+  line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.terms-modal__terms-item:last-child {
+  margin-bottom: 0;
+}
+
+.terms-modal__terms-number {
+  color: #a0a0a0;
+  font-size: 14px;
+  font-weight: 500;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.terms-modal__terms-text {
+  color: #c9c9c9;
+  font-size: 14px;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.terms-modal__divider {
+  height: 1px;
+  background: #3d3d3d;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.terms-modal__understood-btn {
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: var(--glass-shadow-soft);
+  transition: background 0.2s ease, transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.terms-modal__understood-btn:active {
+  background: color-mix(in srgb, var(--primary) 82%, #000);
+  transform: scale(0.98);
+}

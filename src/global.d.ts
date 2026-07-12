@@ -1,51 +1,11 @@
 /// <reference types="vite/client" />
 
+import type { TelegramWebApp } from './integrations/telegram/twa'
+
 declare global {
   interface Window {
     Telegram?: {
-      WebApp: {
-        // Основные методы
-        initData: string;
-        initDataUnsafe: any;
-        version: string;
-        platform: string;
-        
-        // Методы для проверки версий
-        isVersionAtLeast(version: string): boolean;
-        
-        // Методы для работы с ссылками
-        openLink(url: string, options?: { try_instant_view?: boolean }): void;
-        openTelegramLink(url: string): void;
-        
-        // Новые методы (Bot API 8.0+)
-        shareMessage(params: { text: string; url?: string }): void;
-        
-        // Попапы и диалоги
-        showPopup(params: {
-          title?: string;
-          message: string;
-          buttons?: Array<{
-            id?: string;
-            type?: 'default' | 'ok' | 'close' | 'cancel' | 'destructive';
-            text: string;
-          }>;
-        }, callback?: (buttonId: string) => void): void;
-        
-        showAlert(message: string, callback?: () => void): void;
-        showConfirm(message: string, callback?: (confirmed: boolean) => void): void;
-        
-        // Другие свойства
-        themeParams: any;
-        colorScheme: 'light' | 'dark';
-        isExpanded: boolean;
-        viewportHeight: number;
-        
-        // Компоненты
-        MainButton: any;
-        BackButton: any;
-        SettingsButton: any;
-        HapticFeedback: any;
-      };
+      WebApp: TelegramWebApp;
     };
   }
 }

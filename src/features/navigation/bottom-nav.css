@@ -1,0 +1,269 @@
+.bottom-nav {
+  --c-content: #ffffff;
+  --saturation: 140%;
+  --switcher-transition: 0.25s cubic-bezier(1, 0, 0.4, 1);
+  --height: 62px;
+  --glass-surface: color-mix(in srgb, var(--secondary) 64%, transparent);
+
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.bottom-nav__shell {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding-top: 12px;
+  padding-bottom: calc(var(--tg-viewport-safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)) + 10px);
+  padding-left: 16px;
+  padding-right: 16px;
+  pointer-events: auto;
+}
+
+.bottom-nav__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.bottom-nav__switcher {
+  --tab-accent: var(--primary);
+  --tab-count: 2;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--tab-count), 1fr);
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 0;
+  min-width: 0;
+  height: var(--height);
+  padding: 4px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 99em;
+  background-color: var(--glass-surface);
+  box-shadow: var(--glass-shadow);
+  isolation: isolate;
+  transition:
+    background-color var(--switcher-transition),
+    box-shadow var(--switcher-transition);
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .bottom-nav__switcher {
+    background-color: color-mix(in srgb, var(--secondary) 52%, transparent);
+    -webkit-backdrop-filter: blur(12px) saturate(var(--saturation));
+    backdrop-filter: blur(12px) saturate(var(--saturation));
+  }
+}
+
+.bottom-nav__switcher::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  display: block;
+  width: calc((100% - 16px) / 2);
+  height: 54px;
+  border-radius: 99em;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 0;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 2px 1px 0 -1px rgba(255, 255, 255, 0.27),
+    inset -1.5px -1px 0 -1px rgba(255, 255, 255, 0.24),
+    inset -2px -6px 1px -5px rgba(255, 255, 255, 0.18),
+    inset -1px 2px 3px -1px rgba(0, 0, 0, 0.4),
+    inset 0 -4px 1px -2px rgba(0, 0, 0, 0.2),
+    0 3px 6px rgba(0, 0, 0, 0.16);
+  transition:
+    background-color var(--switcher-transition),
+    box-shadow var(--switcher-transition),
+    translate var(--switcher-transition);
+}
+
+.bottom-nav__switcher[data-active='0']::after {
+  translate: 0 0;
+  transform-origin: right;
+  animation: bottom-nav-scale-toggle 0.44s ease;
+}
+
+.bottom-nav__switcher[data-active='1']::after {
+  translate: calc(100% + 8px) 0;
+  transform-origin: left;
+  animation: bottom-nav-scale-toggle-2 0.44s ease;
+}
+
+.bottom-nav__switcher[data-previous='0'][data-active='1']::after {
+  transform-origin: left;
+}
+
+.bottom-nav__switcher[data-previous='1'][data-active='0']::after {
+  transform-origin: right;
+}
+
+.bottom-nav__switcher[data-active='-1']::after {
+  display: none;
+}
+
+@keyframes bottom-nav-scale-toggle {
+  0% { scale: 1 1; }
+  50% { scale: 1.03 1.06; }
+  100% { scale: 1 1; }
+}
+
+@keyframes bottom-nav-scale-toggle-2 {
+  0% { scale: 1 1; }
+  50% { scale: 1.06 1.06; }
+  100% { scale: 1 1; }
+}
+
+.bottom-nav__optionWrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  min-width: 0;
+}
+
+.bottom-nav__option {
+  --c: var(--c-content);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 99em;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0.4;
+  color: var(--c);
+  transition:
+    opacity 0.12s ease,
+    color 0.12s ease;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  min-width: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-nav__option:hover {
+  opacity: 0.7;
+}
+
+.bottom-nav__option:hover .bottom-nav__icon {
+  scale: 1.1;
+}
+
+.bottom-nav__switcher[data-active='0'] .bottom-nav__option[data-option='0'],
+.bottom-nav__switcher[data-active='1'] .bottom-nav__option[data-option='1'],
+.bottom-nav__option--active {
+  --c: var(--tab-accent, var(--primary));
+  opacity: 1;
+  cursor: auto;
+  color: var(--c);
+}
+
+.bottom-nav__option--active:hover {
+  opacity: 1;
+}
+
+.bottom-nav__option--active:hover .bottom-nav__icon {
+  scale: 1;
+}
+
+.bottom-nav__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: scale 0.2s cubic-bezier(0.5, 0, 0, 1);
+  color: currentColor;
+  flex-shrink: 0;
+}
+
+.bottom-nav__icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.bottom-nav__title {
+  font-weight: 500;
+  font-size: 10px;
+  text-align: center;
+  line-height: 1.2;
+  color: currentColor;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.bottom-nav__profile {
+  display: flex;
+  flex: 0 0 var(--height);
+  align-items: center;
+  justify-content: center;
+  background-color: var(--glass-surface);
+  border-radius: 99em;
+  height: var(--height);
+  width: var(--height);
+  min-width: var(--height);
+  box-shadow: var(--glass-shadow);
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .bottom-nav__profile {
+    background-color: color-mix(in srgb, var(--secondary) 72%, transparent);
+    -webkit-backdrop-filter: blur(12px) saturate(var(--saturation));
+    backdrop-filter: blur(12px) saturate(var(--saturation));
+  }
+}
+
+.bottom-nav__profileIcon {
+  border-radius: 99em;
+  border: 2px solid var(--secondary);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.bottom-nav__profileIcon--active {
+  border-color: var(--primary);
+}
+
+.bottom-nav__profileAvatar {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bottom-nav__switcher::after,
+  .bottom-nav__option,
+  .bottom-nav__icon {
+    transition: none !important;
+    animation: none !important;
+  }
+}

@@ -1,0 +1,390 @@
+.balance-modal__sheet {
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 48px - 16px);
+}
+
+.balance-modal__sheet .modal__header {
+  padding: 8px 16px 0;
+}
+
+.balance-modal__sheet .modal__title {
+  font-size: 20px;
+  font-weight: 600;
+  padding-right: 30px;
+}
+
+.balance-modal__body {
+  padding: 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  overflow: hidden auto;
+  gap: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.balance-modal__body::-webkit-scrollbar {
+  display: none;
+}
+
+.balance-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: #f5f5f7;
+}
+
+.balance-modal__shell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 40px;
+  background: color-mix(in oklab, var(--secondary) 65%, transparent);
+}
+
+@supports (corner-shape: squircle) {
+  .balance-modal__shell {
+    corner-shape: squircle;
+  }
+}
+
+.balance-modal__walletBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--secondary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.balance-modal__walletStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  color: #fff;
+}
+
+.balance-modal__walletStatus > span:not(.balance-modal__walletAddress) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.balance-modal__walletLabel {
+  flex-shrink: 0;
+}
+
+.balance-modal__walletAddress {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.balance-modal__walletBalanceBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.balance-modal__walletBalanceBtn:active {
+  transform: scale(0.96);
+  background: color-mix(in oklab, var(--primary) 82%, #000);
+}
+
+.balance-modal__walletBalanceValue {
+  font-weight: 600;
+}
+
+.balance-modal__walletBalanceUnit {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+.balance-modal__walletChevron {
+  width: 10px;
+  height: 10px;
+  transform: rotate(90deg);
+  flex-shrink: 0;
+}
+
+.balance-modal__connectBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.balance-modal__connectBtn:active {
+  background: color-mix(in oklab, var(--primary) 82%, #000);
+}
+
+.balance-modal__card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 40px;
+  background: var(--secondary);
+}
+
+@supports (corner-shape: squircle) {
+  .balance-modal__card {
+    corner-shape: squircle;
+  }
+}
+
+.balance-modal__cardArt {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.balance-modal__cardContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 16px 16px;
+}
+
+.balance-modal__balanceBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.balance-modal__balanceLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.balance-modal__balanceAmount {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.balance-modal__balanceUnit {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.balance-modal__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.balance-modal__actionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 8px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.balance-modal__actionBtn:active {
+  transform: scale(0.98);
+}
+
+.balance-modal__actionBtn--deposit {
+  background: #fff;
+  color: #000;
+}
+
+.balance-modal__actionBtn--deposit:active {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.balance-modal__actionBtn--withdraw {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.balance-modal__actionBtn--withdraw:active {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.balance-modal__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 4px 0;
+}
+
+.balance-modal__panelHeader {
+  display: flex;
+  align-items: center;
+}
+
+.balance-modal__backBtn {
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.balance-modal__panelMessage {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--secondary-foreground);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.balance-modal__panelHint {
+  margin: 0;
+  color: color-mix(in srgb, var(--secondary-foreground) 80%, transparent);
+  font-size: 13px;
+}
+
+.balance-modal__tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.balance-modal__tab {
+  flex: 1;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--muted) 36%, transparent);
+  color: var(--secondary-foreground);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.balance-modal__tab--active {
+  background: color-mix(in srgb, var(--primary) 18%, var(--muted));
+  color: #fff;
+}
+
+.balance-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.balance-modal__fieldLabel {
+  color: var(--secondary-foreground);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.balance-modal__amountInput {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 0.5px solid color-mix(in srgb, var(--secondary-foreground) 28%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--muted) 36%, transparent);
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.balance-modal__amountInput:focus {
+  border-color: var(--primary);
+}
+
+.balance-modal__rate {
+  margin: 0;
+  color: var(--secondary-foreground);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.balance-modal__formActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.balance-modal__panelPrimaryBtn,
+.balance-modal__panelSecondaryBtn {
+  min-height: 48px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--glass-shadow-soft);
+  transition: transform 0.15s ease, background-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.balance-modal__panelPrimaryBtn {
+  background: var(--primary);
+  color: #fafcfe;
+}
+
+.balance-modal__panelPrimaryBtn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.balance-modal__panelPrimaryBtn:active:not(:disabled) {
+  transform: scale(0.98);
+  background: color-mix(in srgb, var(--primary) 82%, #000);
+}
+
+.balance-modal__panelSecondaryBtn {
+  background: color-mix(in srgb, var(--muted) 88%, transparent);
+  color: #fafcfe;
+}
+
+.balance-modal__panelSecondaryBtn:active {
+  transform: scale(0.98);
+}

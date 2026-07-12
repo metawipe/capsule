@@ -1,36 +1,66 @@
 """
-Скрипт для миграции user_id с Integer на BigInteger
-Запустите этот скрипт один раз для обновления существующей базы данных
+Idempotent PostgreSQL migration for Telegram user IDs.
+
+Run this script once before deploying the shared models to an existing
+PostgreSQL database that still has INTEGER user_id columns.
 """
-import os
-from sqlalchemy import create_engine, text
-from dotenv import load_dotenv
+import sys
+from pathlib import Path
 
-load_dotenv()
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///./db.sqlite3')
+from sqlalchemy import text
 
-if DATABASE_URL.startswith('postgresql'):
-    engine = create_engine(DATABASE_URL)
-    
-    print("Миграция user_id на BigInteger...")
-    
-    with engine.connect() as conn:
-        # Изменяем тип user_id в таблице users
-        conn.execute(text("ALTER TABLE users ALTER COLUMN user_id TYPE BIGINT"))
-        print("✅ Таблица users обновлена")
-        
-        # Изменяем тип user_id в таблице user_gifts
-        conn.execute(text("ALTER TABLE user_gifts ALTER COLUMN user_id TYPE BIGINT"))
-        print("✅ Таблица user_gifts обновлена")
-        
-        # Изменяем тип user_id в таблице transactions
-        conn.execute(text("ALTER TABLE transactions ALTER COLUMN user_id TYPE BIGINT"))
-        print("✅ Таблица transactions обновлена")
-        
-        conn.commit()
-    
-    print("✅ Миграция завершена!")
-else:
-    print("⚠️ SQLite не требует миграции (поддерживает большие числа)")
+from backend_shared.database import SQLALCHEMY_DATABASE_URL, engine
+
+TABLES = ("user_gifts", "transactions", "users")
+
+
+def main() -> None:
+    if not SQLALCHEMY_DATABASE_URL.startswith("postgresql"):
+        print("SQLite does not require this migration.")
+        return
+
+    with engine.begin() as conn:
+        column_types = {
+            table_name: data_type
+            for table_name, data_type in conn.execute(
+                text(
+                    """
+                    SELECT table_name, data_type
+                    FROM information_schema.columns
+                    WHERE table_schema = current_schema()
+                      AND table_name IN ('users', 'user_gifts', 'transactions')
+                      AND column_name = 'user_id'
+                    """
+                )
+            )
+        }
+        missing = set(TABLES) - set(column_types)
+        if missing:
+            raise RuntimeError(f"Missing user_id columns: {', '.join(sorted(missing))}")
+
+        tables_to_migrate = [
+            table_name for table_name in TABLES if column_types[table_name] == "integer"
+        ]
+        if not tables_to_migrate:
+            print("user_id columns are already BIGINT; no migration needed.")
+            return
+
+        for table_name in tables_to_migrate:
+            conn.execute(
+                text(
+                    f"ALTER TABLE {table_name} "
+                    "ALTER COLUMN user_id TYPE BIGINT USING user_id::BIGINT"
+                )
+            )
+            print(f"Updated {table_name}.user_id to BIGINT")
+
+    print("Migration completed.")
+
+
+if __name__ == "__main__":
+    main()
 

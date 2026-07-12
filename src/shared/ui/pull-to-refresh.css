@@ -1,0 +1,85 @@
+.pull-to-refresh {
+  position: relative;
+  height: 100%;
+  min-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  --pull-to-refresh-offset: 28px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pull-to-refresh {
+    cursor: default;
+  }
+
+  .pull-to-refresh.pull-to-refresh--pulling {
+    cursor: grabbing;
+    user-select: none;
+  }
+}
+
+.pull-to-refresh__indicator {
+  position: fixed;
+  top: calc(var(--app-topbar-offset, calc(env(safe-area-inset-top, 0px) + 82px)) + var(--pull-to-refresh-offset, 28px));
+  left: 50%;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%) scale(0.72);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.pull-to-refresh__indicator--visible {
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.pull-to-refresh__spinner {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--secondary) 72%, transparent);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  backdrop-filter: blur(10px) saturate(140%);
+  border: 0.5px solid color-mix(in srgb, var(--secondary-foreground) 12%, transparent);
+  box-shadow: var(--glass-shadow-soft);
+  color: #fff;
+  will-change: transform;
+  transition: transform 0.15s ease;
+}
+
+.pull-to-refresh__icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.pull-to-refresh__indicator--refreshing .pull-to-refresh__spinner {
+  animation: pull-to-refresh-spin 0.8s linear infinite;
+}
+
+.pull-to-refresh__indicator--ready:not(.pull-to-refresh__indicator--refreshing) .pull-to-refresh__spinner {
+  background: color-mix(in srgb, var(--primary) 24%, var(--secondary) 72%);
+  border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+}
+
+@keyframes pull-to-refresh-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pull-to-refresh__indicator,
+  .pull-to-refresh__spinner {
+    transition: none !important;
+    animation: none !important;
+  }
+}

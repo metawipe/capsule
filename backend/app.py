@@ -1,3 +1,10 @@
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -5,8 +12,15 @@ from typing import List, Optional
 import os
 from dotenv import load_dotenv
 
-from database import get_db, init_db
-from models import User, UserGift, Transaction, PromoCode
+from backend_shared.balance import (
+    InsufficientBalanceError,
+    create_transaction,
+    credit_balance,
+    debit_ton,
+    get_or_create_user,
+)
+from backend_shared.database import SQLALCHEMY_DATABASE_URL, get_db, init_db
+from backend_shared.models import PromoCode, Transaction, User, UserGift
 from schemas import (
     UserResponse, UserCreate, 
     UserGiftResponse, UserGiftCreate,
@@ -94,8 +108,7 @@ async def get_balance(user_id: int, db: Session = Depends(get_db)):
     if not user:
         print(f"[API] User {user_id} not found, creating new user")
         # Создаем пользователя с нулевым балансом
-        user = User(user_id=user_id, balance_ton=0.0, balance_stars=0)
-        db.add(user)
+        user = get_or_create_user(db, user_id)
         db.commit()
         db.refresh(user)
     else:
@@ -116,32 +129,20 @@ async def deposit_balance(
     db: Session = Depends(get_db)
 ):
     """Пополнить баланс пользователя"""
-    user = db.query(User).filter(User.user_id == user_id).first()
-    if not user:
-        # Создаем пользователя если его нет
-        user = User(user_id=user_id, balance_ton=0.0, balance_stars=0)
-        db.add(user)
-        db.commit()
-        db.refresh(user)
-    
-    # Обновляем баланс
-    if deposit_data.currency == 'TON':
-        user.balance_ton += deposit_data.amount
-    elif deposit_data.currency == 'STARS':
-        user.balance_stars += int(deposit_data.amount)
-    else:
-        raise HTTPException(status_code=400, detail="Invalid currency")
-    
-    # Создаем транзакцию
-    transaction = Transaction(
+    user = get_or_create_user(db, user_id)
+    try:
+        credit_balance(db, user, deposit_data.amount, deposit_data.currency)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    transaction = create_transaction(
+        db,
         user_id=user_id,
-        transaction_type='deposit',
+        transaction_type="deposit",
         amount=deposit_data.amount,
         currency=deposit_data.currency,
         tx_hash=deposit_data.tx_hash,
-        status='completed'
     )
-    db.add(transaction)
     db.commit()
     db.refresh(transaction)
     
@@ -173,12 +174,6 @@ async def purchase_gift(
         raise HTTPException(status_code=404, detail="User not found")
     
     # Проверяем баланс
-    if user.balance_ton < purchase_data.gift_price:
-        raise HTTPException(
-            status_code=400, 
-            detail="Insufficient balance"
-        )
-    
     # Проверяем, нет ли уже такого подарка
     existing_gift = db.query(UserGift).filter(
         UserGift.user_id == user_id,
@@ -192,7 +187,12 @@ async def purchase_gift(
         )
     
     # Списываем баланс
-    user.balance_ton -= purchase_data.gift_price
+    try:
+        debit_ton(user, purchase_data.gift_price)
+    except InsufficientBalanceError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
     
     # Создаем запись о подарке
     user_gift = UserGift(
@@ -205,15 +205,14 @@ async def purchase_gift(
     db.add(user_gift)
     
     # Создаем транзакцию
-    transaction = Transaction(
+    transaction = create_transaction(
+        db,
         user_id=user_id,
-        transaction_type='purchase',
+        transaction_type="purchase",
         amount=purchase_data.gift_price,
-        currency='TON',
+        currency="TON",
         gift_id=purchase_data.gift_id,
-        status='completed'
     )
-    db.add(transaction)
     
     db.commit()
     db.refresh(user_gift)
@@ -265,8 +264,6 @@ async def api_root():
 async def debug_db(db: Session = Depends(get_db)):
     """Debug endpoint to check database connection"""
     import os
-    from database import SQLALCHEMY_DATABASE_URL
-    
     # Получаем информацию о БД
     db_url = os.getenv('DATABASE_URL', 'NOT SET')
     db_type = "PostgreSQL" if SQLALCHEMY_DATABASE_URL.startswith('postgresql') else "SQLite"
@@ -325,27 +322,23 @@ async def activate_promo_code(
             detail="User not found"
         )
     
-    # Пополняем баланс TON
-    user.balance_ton += promo.amount
-    
-    # Создаем транзакцию
+    # Пополняем баланс TON и создаем транзакцию in one commit.
     from datetime import datetime
-    transaction = Transaction(
+    credit_balance(db, user, promo.amount, "TON")
+    transaction = create_transaction(
+        db,
         user_id=user_id,
-        transaction_type='deposit',
+        transaction_type="deposit",
         amount=promo.amount,
-        currency='TON',
-        status='completed',
+        currency="TON",
         tx_hash=f"PROMO_{code}"
     )
-    db.add(transaction)
-    db.commit()
-    db.refresh(transaction)
-    
+
     # Отмечаем промокод как использованный
     promo.is_used = True
     promo.user_id = user_id
     promo.used_at = datetime.utcnow()
+    db.flush()
     promo.transaction_id = transaction.id
     db.commit()
     

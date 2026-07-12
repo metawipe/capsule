@@ -1,0 +1,74 @@
+.skeleton {
+  display: block;
+  border-radius: 10px;
+  background: linear-gradient(100deg, #26262a 25%, #393940 42%, #26262a 58%);
+  background-size: 220% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  to { background-position: -120% 0; }
+}
+
+.gift-grid-skeleton {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.gift-grid-skeleton__card {
+  overflow: hidden;
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--secondary) 65%, transparent);
+  box-shadow: var(--glass-shadow);
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+@supports (corner-shape: squircle) {
+  .gift-grid-skeleton__card {
+    corner-shape: squircle;
+    border-radius: 60px;
+  }
+}
+
+.gift-grid-skeleton__image {
+  aspect-ratio: 1;
+  border-radius: 26px;
+}
+
+@supports (corner-shape: squircle) {
+  .gift-grid-skeleton__image {
+    corner-shape: squircle;
+    border-radius: 50px;
+  }
+}
+
+.gift-grid-skeleton__content {
+  display: grid;
+  gap: 8px;
+}
+
+.gift-grid-skeleton__title { width: 72%; height: 18px; }
+.gift-grid-skeleton__meta { width: 42%; height: 12px; }
+.gift-grid-skeleton__actions {
+  display: flex;
+  gap: 4px;
+}
+
+.gift-grid-skeleton__button {
+  flex: 1;
+  height: 34px;
+  border-radius: 26px;
+}
+
+.gift-grid-skeleton__cart {
+  width: 52px;
+  height: 36px;
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+}
