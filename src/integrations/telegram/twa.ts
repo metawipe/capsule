@@ -33,6 +33,18 @@ export interface TelegramWebApp {
   viewportHeight: number;
   viewportStableHeight: number;
   isFullscreen: boolean;
+  safeAreaInset?: {
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+  };
+  contentSafeAreaInset?: {
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+  };
   
   ready: () => void;
   expand: () => void;
@@ -70,6 +82,27 @@ function isDesktopTelegramClient(webApp: TelegramWebApp): boolean {
     && !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
+function applyModalViewportInsets(webApp: TelegramWebApp): void {
+  const root = document.documentElement
+  const isAndroid = webApp.platform === 'android' || /Android/i.test(navigator.userAgent)
+  const contentInset = webApp.contentSafeAreaInset
+  const safeInset = webApp.safeAreaInset
+  const topInset = Math.max(contentInset?.top ?? 0, safeInset?.top ?? 0)
+  const bottomInset = Math.max(contentInset?.bottom ?? 0, safeInset?.bottom ?? 0)
+  const extraTop = isAndroid ? 16 : 12
+  const extraBottom = 8
+
+  if (topInset > 0) {
+    root.style.setProperty('--modal-gap-top', `${topInset + extraTop}px`)
+  } else if (isAndroid) {
+    root.style.setProperty('--modal-gap-top', '56px')
+  }
+
+  if (bottomInset > 0) {
+    root.style.setProperty('--modal-gap-bottom', `${bottomInset + extraBottom}px`)
+  }
+}
+
 export function initTelegramMiniApp(): void {
   if (!isTelegramWebApp()) {
     return;
@@ -80,10 +113,15 @@ export function initTelegramMiniApp(): void {
 
   const isAndroid = webApp.platform === 'android' || /Android/i.test(navigator.userAgent);
   document.documentElement.classList.toggle('android-mini-app', isAndroid);
+  applyModalViewportInsets(webApp);
 
   try {
     webApp.ready();
   } catch (error) {}
+
+  const onViewportChange = () => applyModalViewportInsets(webApp);
+  window.addEventListener('viewportChanged', onViewportChange);
+  window.addEventListener('safeAreaChanged', onViewportChange);
 
   // Desktop clients use the largest available Mini App window. On mobile,
   // request the native fullscreen mode when the Telegram client supports it.
@@ -107,6 +145,10 @@ export function initTelegramMiniApp(): void {
       }
     }
   }
+
+  // Fullscreen expands after ready(); re-apply insets once layout settles.
+  window.setTimeout(() => applyModalViewportInsets(webApp), 0);
+  window.setTimeout(() => applyModalViewportInsets(webApp), 250);
 
   try {
     document.addEventListener(

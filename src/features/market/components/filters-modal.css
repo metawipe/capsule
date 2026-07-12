@@ -1,5 +1,5 @@
 .filters-modal__sheet {
-  max-height: calc(100dvh - var(--modal-gap-top) - var(--modal-gap-bottom));
+  max-height: calc(100% - var(--modal-gap-top) - var(--modal-gap-bottom));
 }
 
 .filters-modal__body {

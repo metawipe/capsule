@@ -8,7 +8,11 @@ export async function proxyChangesApi(req: VercelRequest, res: VercelResponse) {
 
   try {
     const original = String(req.headers['x-vercel-original-path'] || req.url || '/')
-    const path = original.split('?')[0].replace(/^\/api\/api-changes/, '').replace(/^\/api-changes/, '') || '/'
+    let path = original.split('?')[0].replace(/^\/api\/api-changes/, '').replace(/^\/api-changes/, '') || '/'
+    if ((path === '/' || path === '') && req.query.path) {
+      const segments = Array.isArray(req.query.path) ? req.query.path : [req.query.path]
+      path = `/${segments.filter(Boolean).join('/')}`
+    }
     const query = new URLSearchParams()
     Object.entries(req.query).forEach(([key, value]) => {
       if (key !== 'path' && value) (Array.isArray(value) ? value : [value]).forEach((item) => query.append(key, String(item)))
