@@ -83,23 +83,38 @@ function isDesktopTelegramClient(webApp: TelegramWebApp): boolean {
 }
 
 function applyModalViewportInsets(webApp: TelegramWebApp): void {
-  const root = document.documentElement
+  const { top, bottom } = getModalInsetsFromWebApp(webApp)
+  document.documentElement.style.setProperty('--modal-gap-top', `${top}px`)
+  document.documentElement.style.setProperty('--modal-gap-bottom', `${bottom}px`)
+}
+
+export function getModalInsets() {
+  const webApp = getTelegramWebApp()
+  if (webApp) return getModalInsetsFromWebApp(webApp)
+
+  const isAndroid = document.documentElement.classList.contains('android-mini-app')
+    || /Android/i.test(navigator.userAgent)
+
+  return {
+    top: isAndroid ? 64 : 12,
+    bottom: 8,
+    side: 8,
+  }
+}
+
+function getModalInsetsFromWebApp(webApp: TelegramWebApp) {
   const isAndroid = webApp.platform === 'android' || /Android/i.test(navigator.userAgent)
   const contentInset = webApp.contentSafeAreaInset
   const safeInset = webApp.safeAreaInset
   const topInset = Math.max(contentInset?.top ?? 0, safeInset?.top ?? 0)
   const bottomInset = Math.max(contentInset?.bottom ?? 0, safeInset?.bottom ?? 0)
-  const extraTop = isAndroid ? 16 : 12
+  const extraTop = isAndroid ? 20 : 12
   const extraBottom = 8
 
-  if (topInset > 0) {
-    root.style.setProperty('--modal-gap-top', `${topInset + extraTop}px`)
-  } else if (isAndroid) {
-    root.style.setProperty('--modal-gap-top', '56px')
-  }
-
-  if (bottomInset > 0) {
-    root.style.setProperty('--modal-gap-bottom', `${bottomInset + extraBottom}px`)
+  return {
+    top: topInset > 0 ? topInset + extraTop : (isAndroid ? 64 : 12),
+    bottom: bottomInset > 0 ? bottomInset + extraBottom : 8,
+    side: 8,
   }
 }
 

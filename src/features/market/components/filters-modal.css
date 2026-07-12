@@ -1,7 +1,3 @@
-.filters-modal__sheet {
-  max-height: calc(100% - var(--modal-gap-top) - var(--modal-gap-bottom));
-}
-
 .filters-modal__body {
   padding: 10px 16px calc(16px + env(safe-area-inset-bottom, 0px));
   overflow: hidden;

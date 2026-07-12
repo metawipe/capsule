@@ -58,8 +58,8 @@
 }
 
 html.android-mini-app {
-  --modal-gap-top: 56px;
-  --modal-gap-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  --modal-gap-top: 64px;
+  --modal-gap-bottom: 12px;
 }
 
 .glass-shadow {
